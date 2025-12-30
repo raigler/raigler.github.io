@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Raigler - поисковая система!</title>
+</head>
+<body>
+    <center>
+        <img src="logotayp.jpg" alt="Raigler" width="280" height="115">
+        <br>
+        <b>Интернет</b> - <a href="images.html">Картинки</a> - <a href="news.html">Поиск Новостей</a> <font color="red">(New!)</font>
+        <br>
+        <br>
+        <input type="text" id="searchInput" name="q" autofocus size="60" onkeydown="if(event.key === 'Enter') doSearch()">
+        <br>
+        <button onclick="doSearch()">Raigler Search</button>
+        <script>
+            function doSearch() {
+                let query = document.getElementById("searchInput").value;
+                window.location.href = "search.html#gsc.tab=0&gsc.q=" + encodeURIComponent(query);
+            }
+        </script>
+        <br>
+        <br>
+        <br>
+        <br>
+        <a href="service.html">Сервисы</a> - <a href="http://yandex.ru/pogoda">Погода в Вашем городе</a>
+        <br>
+        <br>
+        <b> <font color="gray">Raigler - 2025</font> </b>
+    </center>
+</body>
+</html>
+
+
+
+

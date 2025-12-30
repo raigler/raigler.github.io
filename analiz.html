@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Анализатор Паролей - Raigler</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <script language="JavaScript">
+        function analyzePassword() {
+            var password = document.getElementById("password").value;
+            var message = "";
+            var strength = 0;
+
+            // Простые проверки на длину
+            if (password.length == 0) {
+                message = "Пожалуйста, введите пароль.";
+            } else if (password.length < 6) {
+                message = "Слабый: Пароль слишком короткий (минимум 6 символов).";
+            } else {
+                strength = 1; // Уже не совсем плохой
+
+                // Проверка на наличие цифр
+                if (/[0-9]/.test(password)) {
+                    strength++;
+                }
+
+                // Проверка на наличие букв верхнего регистра
+                if (/[A-Z]/.test(password)) {
+                    strength++;
+                }
+
+                // Проверка на наличие специальных символов
+                if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+                    strength++;
+                }
+
+                if (strength == 1) {
+                    message = "Средний: Пароль требует больше разнообразия.";
+                } else if (strength == 2) {
+                    message = "Нормальный: Пароль неплохой, но можно улучшить.";
+                } else if (strength == 3) {
+                    message = "Сильный: Хороший пароль.";
+                } else {
+                    message = "Очень сильный: Отличный пароль!";
+                }
+            }
+
+            document.getElementById("result").innerHTML = message;
+        }
+    </script>
+</head>
+<body>
+
+<h1> <a href="service.html">Raigler</a> </h1>
+
+<form id="passwordForm" onsubmit="return false;"> <!-- onSubmit="return false;" предотвращает отправку формы -->
+    <label for="password">Введите пароль:</label>
+    <input type="password" id="password" name="password" />
+    <input type="button" value="Анализировать" onclick="analyzePassword()" />
+</form>
+
+<p id="result"></p>
+
+</body>
+</html>

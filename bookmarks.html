@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Raigler-Закладки</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+
+    <h1> <a href="service.html">Raigler</a> </h1>
+
+    <form id="bookmarkForm">
+        <label for="newBookmark">Введите URL:</label>
+        <input type="text" id="newBookmark" name="newBookmark" size="50">
+        <button type="button" onclick="addBookmark()">Добавить</button>
+    </form>
+
+    <h2>Сохраненные закладки:</h2>
+    <ul id="bookmarkList">
+    </ul>
+
+    <script type="text/javascript">
+        // Функция для добавления закладки
+        function addBookmark() {
+            var url = document.getElementById("newBookmark").value;
+
+            if (url) {
+                // Автоматически добавляем "http://" если отсутствует
+                if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                    url = "http://" + url;
+                }
+
+                var bookmarks = localStorage.getItem("bookmarks");
+                if (bookmarks === null) {
+                    bookmarks = [];
+                } else {
+                    bookmarks = JSON.parse(bookmarks);
+                }
+
+                bookmarks.push(url);
+
+                localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+
+                displayBookmarks();
+
+                document.getElementById("newBookmark").value = "";
+            } else {
+                alert("Пожалуйста, введите URL.");
+            }
+        }
+
+        // Функция для удаления закладки
+        function deleteBookmark(index) {
+            var bookmarks = localStorage.getItem("bookmarks");
+            if (bookmarks !== null) {
+                bookmarks = JSON.parse(bookmarks);
+                bookmarks.splice(index, 1); // Удаляем элемент по индексу
+                localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+                displayBookmarks(); // Обновляем список
+            }
+        }
+
+
+        // Функция для отображения закладок
+        function displayBookmarks() {
+            var bookmarkList = document.getElementById("bookmarkList");
+            bookmarkList.innerHTML = "";
+
+            var bookmarks = localStorage.getItem("bookmarks");
+            if (bookmarks !== null) {
+                bookmarks = JSON.parse(bookmarks);
+                for (var i = 0; i < bookmarks.length; i++) {
+                    var url = bookmarks[i];
+                    var listItem = document.createElement("li");
+
+                    var link = document.createElement("a");
+                    link.href = url;
+                    link.target = "_blank";
+                    link.appendChild(document.createTextNode(url));
+                    listItem.appendChild(link);
+
+
+                    // Кнопка "Удалить"
+                    var deleteButton = document.createElement("button");
+                    deleteButton.type = "button";
+                    deleteButton.appendChild(document.createTextNode("[удалить]"));
+                    deleteButton.setAttribute("onclick", "deleteBookmark(" + i + ")"); // Передаем индекс
+
+                    listItem.appendChild(deleteButton);
+
+
+                    bookmarkList.appendChild(listItem);
+                }
+            }
+        }
+
+        // Загружаем закладки при загрузке страницы
+        window.onload = function() {
+            displayBookmarks();
+        };
+    </script>
+
+</body>
+</html>
