@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raigler - Ищет, то, что надо!</title>
+</head>
+<body>
+    <center>
+        <img src="logotayp.jpg" alt="Raigler" width="280" height="115">
+        <br>
+        <a href="index.html">Интернет</a> - <a href="images.html">Картинки</a> - <a href="video.html">Видео</a> - <b>Вопросы и ответы</b>
+        <br>
+        <br>
+        <input type="text" id="searchInput" name="q" autofocus size="60" onkeydown="if(event.key === 'Enter') doSearch()">
+        <br>
+        <button onclick="doSearch()">Raigler Search</button>
+        <script>
+            function doSearch() {
+                let query = document.getElementById("searchInput").value;
+                window.location.href = "questionsearch.html#gsc.tab=0&gsc.q=" + encodeURIComponent(query);
+            }
+        </script>
+        <br>
+        <br>
+        <br>
+        <br>
+        <a href="about.txt">О сайте "Raigler"</a> - <a href="service.html">Сервисы</a> - <a href="http://yandex.ru/pogoda">Погода в Вашем городе</a>
+        <br>
+        <br>
+        <font color="gray">Raigler - 2026</font> - <font color="yellow">С новым годом!</font>
+    </center>
+</body>
+</html>
