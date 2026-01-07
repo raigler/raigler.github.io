@@ -1,17 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Raigler-Закладки</title>
+    <title>Raigler Bookmarks</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
     <h1> <a href="service.html">Raigler</a> </h1>
 
     <form id="bookmarkForm">
-        <label for="newBookmark">Введите URL:</label>
-        <input type="text" id="newBookmark" name="newBookmark" size="50">
+        <label for="newBookmarkInput">Введите URL:</label>
+        <input type="text" id="newBookmarkInput" name="newBookmark" size="50">
         <button type="button" onclick="addBookmark()">Добавить</button>
     </form>
 
@@ -22,7 +21,7 @@
     <script type="text/javascript">
         // Функция для добавления закладки
         function addBookmark() {
-            var url = document.getElementById("newBookmark").value;
+            var url = document.getElementById("newBookmarkInput").value;
 
             if (url) {
                 // Автоматически добавляем "http://" если отсутствует
@@ -37,13 +36,16 @@
                     bookmarks = JSON.parse(bookmarks);
                 }
 
-                bookmarks.push(url);
+                // Проверяем, нет ли уже такой закладки
+                if (!bookmarks.includes(url)) {
+                    bookmarks.push(url);
+                    localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+                    displayBookmarks();
+                } else {
+                    alert("Эта закладка уже существует.");
+                }
 
-                localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-
-                displayBookmarks();
-
-                document.getElementById("newBookmark").value = "";
+                document.getElementById("newBookmarkInput").value = "";
             } else {
                 alert("Пожалуйста, введите URL.");
             }
@@ -59,7 +61,6 @@
                 displayBookmarks(); // Обновляем список
             }
         }
-
 
         // Функция для отображения закладок
         function displayBookmarks() {
@@ -79,15 +80,20 @@
                     link.appendChild(document.createTextNode(url));
                     listItem.appendChild(link);
 
-
                     // Кнопка "Удалить"
                     var deleteButton = document.createElement("button");
                     deleteButton.type = "button";
                     deleteButton.appendChild(document.createTextNode("[удалить]"));
-                    deleteButton.setAttribute("onclick", "deleteBookmark(" + i + ")"); // Передаем индекс
-
+                    deleteButton.onclick = (function(idx) {
+                        return function() {
+                            deleteBookmark(idx);
+                        };
+                    })(i);
                     listItem.appendChild(deleteButton);
 
+                    // Добавляем <br> после ссылки и кнопки
+                    var brElement = document.createElement("br");
+                    listItem.appendChild(brElement);
 
                     bookmarkList.appendChild(listItem);
                 }
@@ -96,10 +102,41 @@
 
         // Загружаем закладки при загрузке страницы
         window.onload = function() {
+            // Сначала отображаем существующие закладки
             displayBookmarks();
+
+            // Проверяем наличие параметра 'newBookmark' в URL
+            var params = new URLSearchParams(window.location.search);
+            if (params.has('newBookmark')) {
+                var urlFromParam = params.get('newBookmark');
+
+                if (urlFromParam) {
+                    // Применяем ту же логику добавления "http://"
+                    if (!urlFromParam.startsWith("http://") && !urlFromParam.startsWith("https://")) {
+                        urlFromParam = "http://" + urlFromParam;
+                    }
+
+                    var bookmarks = localStorage.getItem("bookmarks");
+                    if (bookmarks === null) {
+                        bookmarks = [];
+                    } else {
+                        bookmarks = JSON.parse(bookmarks);
+                    }
+
+                    // Добавляем новую закладку из URL-параметра, если ее еще нет
+                    if (!bookmarks.includes(urlFromParam)) {
+                        bookmarks.push(urlFromParam);
+                        localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+                        // Обновляем список, чтобы показать новую закладку
+                        displayBookmarks();
+                    }
+                    // Очищаем параметр из URL, чтобы при обновлении страницы он не добавлялся снова
+                    // window.history.replaceState({}, document.title, window.location.pathname);
+                    // ^ Закомментировано, если нужно, чтобы закладка добавлялась каждый раз при переходе по ссылке с параметром
+                }
+            }
         };
     </script>
 
 </body>
-
 </html>
