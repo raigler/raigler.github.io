@@ -2,13 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raigler - Ищет то, что надо!</title>
-
-    <style>
-        @-ms-viewport { width: 1024px; }
-        @viewport { width: 1024px; }
-    </style>
 </head>
 <body>
     <center>
@@ -17,7 +12,7 @@
         <b>Интернет</b> - <a href="images.html">Картинки</a> - <a href="video.html">Видео</a> - <a href="question.html">Вопросы и ответы</a> <font color="red">(New!)</font>
         <br>
         <br>
-        <input type="text" id="searchInput" name="q" autofocus size="30" onkeydown="if(event.key === 'Enter') doSearch()">
+        <input type="text" id="searchInput" name="q" autofocus size="60" onkeydown="if(event.key === 'Enter') doSearch()">
         <br>
         <button onclick="doSearch()">Raigler Search</button>
         <script>
@@ -37,4 +32,3 @@
     </center>
 </body>
 </html>
-
